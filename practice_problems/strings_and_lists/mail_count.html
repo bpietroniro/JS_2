@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mail count</title>
+  </head>
+  <body>
+    <script src="https://dbdwvr6p7sskw.cloudfront.net/210/files/email_data_v2.js"></script>
+    <script>
+      function mailCount(emailData) {
+        let messageList = emailData.split('##||##');
+        let emails = messageList
+          .map(message => message.split('#/#'))
+          .map(parts => { 
+            return { 
+              sender: parts[0],
+              subject: parts[1],
+              date: parts[2],
+              recipient: parts[3],
+              body: parts[4],
+            };
+        });
+
+        const emailCount = messageList.length;
+        const [minDate, maxDate] = findMinAndMax(emails.map(email => email.date));
+
+        console.log(`Count of Email: ${emailCount}`);
+        console.log(`Date Range: ${minDate} - ${maxDate}`);
+      }
+
+      function findMinAndMax(dates) {
+        let min = new Date(dates[0]);
+        let max = new Date(dates[0]);
+
+        dates.forEach(date => {
+          let dateObj = new Date(date);
+          if (min > dateObj) {
+            min = date;
+          }
+
+          if (max < dateObj) {
+            max = date;
+          }
+        });
+
+        return [min, max];
+      }
+
+      mailCount(emailData);
+    </script>
+  </body>
+</html>
